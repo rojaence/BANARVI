@@ -1,0 +1,15 @@
+$primary-bg-color: #0A3F5C;
+$secondary-bg-color: #F2F2F2;
+$accent-color: #88d295;
+$border-color: #737373;
+$canvas-bg-color: #c5c5c5;;
+
+.theme {
+    --primary-bg-color: #{$primary-bg-color};
+    --secondary-bg-color: #{$secondary-bg-color};
+    --accent-color: #{$accent-color};
+    --border-color: #{$border-color};
+    --dark-border-line: 2px solid var(--border-color);
+    --light-border-line: 1px solid var(--border-color);
+    --canvas-bg-color: #{$canvas-bg-color};
+}

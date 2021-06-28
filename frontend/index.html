@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <script
+      src="https://kit.fontawesome.com/ef38c41be6.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>BANARVI</title>
+  </head>
+  <body class="theme">
+    <header class="header">
+      <img src="assets/icon.svg" alt="logo" class="header__logo"/>
+      <h1 class="header__title">BANARVI</h1>
+    </header>
+    <main class="main">
+      <section class="multimedia" id="multimedia">
+        <div class="multimedia__image" data-image="image-1" id="div-image-1">
+          <canvas id="canvas-image-1" class="multimedia__canvas" data-image="image-1"></canvas>
+        </div>
+        <div class="multimedia__image" data-image="image-2" id="div-image-2">
+          <canvas id="canvas-image-2" data-image="image-2" class="multimedia__canvas"></canvas>
+        </div>
+      </section>
+      <section class="control">
+        <div class="control__device">
+          <label for="camera-device" class="control__label control__label--camera">Cámara</label>
+          <select
+            name="camera-device"
+            id="camera-device"
+            class="control__select"
+          ></select>
+          <div class="control__device-play" id="play-button"><i class="fas fa-play"></i></div>
+          <div class="control__device-refresh" id="refresh-button"><i class="fas fa-sync-alt"></i></div>
+        </div>
+        <div class="control__panel">
+          <div class="control__button" id="camera-button">
+            <i class="fas fa-camera control__icon"></i>
+            <label for="camera-button" class="control__label control__label--button">Capturar</label>
+          </div>
+          <div class="control__button" id="delete-button">
+            <i class="fas fa-trash-alt control__icon"></i>
+            <label for="delete-button" class="control__label control__label--button">Limpiar</label>
+          </div>
+          <div class="control__button" id="analize-button">
+            <i class="fas fa-file-signature control__icon"></i>
+            <label for="analize-button" class="control__label control__label--button">Analizar</label>
+          </div>
+        </div>
+        <video class="control__stream" id="stream"></video>
+      </section>
+      <section class="report">
+        <h2 class="report__title">Resultado</h2>
+        <div class="report__image">
+          <h3 class="report__subtitle">Imagen 1</h3>
+          <div class="report__parameter">
+            <span class="report__label">Parámetro 1:</span>
+            <span class="report__value">Valor 1</span>
+          </div>
+          <div class="report__parameter">
+            <span class="report__label">Parámetro 2:</span>
+            <span class="report__value">Valor 2</span>
+          </div>
+          <div class="report__parameter">
+            <span class="report__label">Parámetro 3:</span>
+            <span class="report__value">Valor 3</span>
+          </div>
+        </div>
+        <div class="report__image">
+          <h3 class="report__subtitle">Imagen 2</h3>
+          <div class="report__parameter">
+            <span class="report__label">Parámetro 1:</span>
+            <span class="report__value">Valor 1</span>
+          </div>
+          <div class="report__parameter">
+            <span class="report__label">Parámetro 2:</span>
+            <span class="report__value">Valor 2</span>
+          </div>
+          <div class="report__parameter">
+            <span class="report__label">Parámetro 3:</span>
+            <span class="report__value">Valor 3</span>
+          </div>
+        </div>
+        <div class="report__category">
+          <h3 class="report__subtitle">Categoría</h3>
+        </div>
+      </section>
+    </main>
+    <script src="js/index.js"></script>
+  </body>
+</html>

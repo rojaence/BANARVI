@@ -1,0 +1,168 @@
+.theme {
+  --primary-bg-color: #0A3F5C;
+  --secondary-bg-color: #F2F2F2;
+  --accent-color: #88d295;
+  --border-color: #737373;
+  --dark-border-line: 2px solid var(--border-color);
+  --light-border-line: 1px solid var(--border-color);
+  --canvas-bg-color: #c5c5c5; }
+
+html {
+  font-family: sans-serif;
+  font-size: 18px; }
+
+body {
+  background-color: var(--secondary-bg-color);
+  min-height: 100vh; }
+
+.header {
+  background-color: var(--primary-bg-color);
+  color: var(--secondary-bg-color);
+  padding: 0 1rem;
+  display: flex; }
+  .header__logo {
+    width: 48px;
+    height: 48px;
+    align-self: center;
+    margin-right: 1rem; }
+  .header__title {
+    margin: 1rem 0; }
+
+.main {
+  display: grid;
+  grid-template-areas: "multimedia control" "report report";
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  gap: 2rem 1rem;
+  padding: 1rem;
+  max-width: 1600px;
+  margin: 0 auto; }
+  @media (min-width: 1367px) {
+    .main {
+      padding: 3rem; } }
+
+.multimedia {
+  grid-area: multimedia;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(2, 400px);
+  column-gap: 1rem; }
+  .multimedia__image {
+    min-height: 300px;
+    border: var(--dark-border-line);
+    padding: 0.2rem;
+    transition: background-color 0.2s;
+    display: grid;
+    place-items: center; }
+    .multimedia__image:hover {
+      border-color: var(--accent-color); }
+    .multimedia__image--active {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color); }
+  .multimedia__canvas {
+    background-color: var(--canvas-bg-color);
+    width: 380px;
+    height: 300px; }
+
+.control {
+  font-size: 1.2rem;
+  grid-area: control;
+  border: var(--dark-border-line);
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: 30px 1fr;
+  grid-template-areas: "device device" "panel stream" "panel stream";
+  padding: 1rem;
+  gap: 1rem; }
+  .control__device {
+    grid-area: device;
+    display: flex;
+    justify-content: space-around; }
+  .control__label--camera {
+    text-align: center;
+    align-self: center;
+    font-size: 1rem; }
+  .control__select {
+    font-size: 0.8rem; }
+  .control__stream {
+    grid-area: stream;
+    width: 320px;
+    box-sizing: border-box;
+    height: 240px;
+    border: var(--light-border-line); }
+  .control__panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    place-items: center; }
+  .control__button {
+    padding: 1rem;
+    height: 1rem;
+    width: 1rem;
+    border: var(--dark-border-line);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: color .2s, background-color .3s; }
+    .control__button:hover {
+      background-color: var(--accent-color);
+      color: var(--primary-bg-color); }
+      .control__button:hover .control__icon {
+        color: var(--primary-bg-color);
+        transform: scale(1.1); }
+  .control__label--button {
+    display: none; }
+  .control__icon {
+    font-size: 1.2rem;
+    color: var(--border-color);
+    transition: transform .2s; }
+  .control__device-refresh, .control__device-play {
+    align-self: center;
+    color: var(--border-color);
+    transition: color 0.1s, transform 0.2s; }
+    .control__device-refresh:hover, .control__device-play:hover {
+      color: var(--primary-bg-color);
+      transform: scale(1.1); }
+  @media (min-width: 1367px) {
+    .control__label--button {
+      display: block; }
+    .control__button {
+      flex-direction: row;
+      width: 75%;
+      border-radius: 3rem;
+      justify-content: space-around; } }
+
+.report {
+  grid-area: report;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) 0.5fr;
+  grid-template-rows: repeat(2, auto);
+  column-gap: 2rem;
+  place-items: center;
+  border: var(--dark-border-line);
+  padding: 1rem 4rem 2rem;
+  font-size: 1.2rem; }
+  .report__image, .report__category {
+    border: var(--light-border-line);
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem 4rem;
+    box-sizing: border-box; }
+  .report__image {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; }
+  .report__parameter {
+    display: flex;
+    flex-direction: row; }
+  .report__label {
+    margin-right: 2rem; }
+  .report__title, .report__subtitle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: inherit; }
+  .report__title {
+    grid-column: 1 / span 3;
+    justify-self: left; }
