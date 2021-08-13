@@ -1,15 +1,22 @@
-$primary-bg-color: #0A3F5C;
-$secondary-bg-color: #F2F2F2;
+$primary-bg-color: #0a3f5c;
+$scroll-bg-color: #5197bd;
+$scroll-accent-color: #237AA8;
+$secondary-bg-color: #f2f2f2;
 $accent-color: #88d295;
 $border-color: #737373;
-$canvas-bg-color: #c5c5c5;;
-
+$canvas-bg-color: #c5c5c5;
+$light-bg-color: #ddd;
+$report-bg-color: #e6f0e6;
 .theme {
-    --primary-bg-color: #{$primary-bg-color};
-    --secondary-bg-color: #{$secondary-bg-color};
-    --accent-color: #{$accent-color};
-    --border-color: #{$border-color};
-    --dark-border-line: 2px solid var(--border-color);
-    --light-border-line: 1px solid var(--border-color);
-    --canvas-bg-color: #{$canvas-bg-color};
+  --primary-bg-color: #{$primary-bg-color};
+  --secondary-bg-color: #{$secondary-bg-color};
+  --accent-color: #{$accent-color};
+  --border-color: #{$border-color};
+  --dark-border-line: 2px solid var(--border-color);
+  --light-border-line: 1px solid var(--border-color);
+  --canvas-bg-color: #{$canvas-bg-color};
+  --report-bg-color: #{$report-bg-color};
+  --light-bg-color: #{$light-bg-color};
+  --scroll-bg-color: #{$scroll-bg-color};
+  --scroll-accent-color: #{$scroll-accent-color};
 }

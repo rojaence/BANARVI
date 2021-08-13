@@ -1,0 +1,242 @@
+@import "_variables.scss";
+
+html {
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+body {
+  background-color: var(--secondary-bg-color);
+  min-height: 100vh;
+}
+
+.header {
+  background-color: var(--primary-bg-color);
+  color: var(--secondary-bg-color);
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  .logo-container {
+    display: flex;
+  }
+  .main-nav {
+    &__list {
+      display: flex;
+      padding-left: 0;
+    }
+    &__item {
+      list-style: none;
+      align-self: flex-start;
+    }
+    &__link {
+      text-decoration: none;
+      color: var(--secondary-bg-color);
+      padding: 1rem 4rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      transition: background-color 0.2s, color 0.2s;
+      &--inactive {
+        &:hover {
+          color: var(--accent-color);
+        }
+      }
+      &--active {
+        background-color: var(--secondary-bg-color);
+        color: var(--primary-bg-color);
+      }
+    }
+  }
+  &__logo {
+    width: 48px;
+    height: 48px;
+    align-self: center;
+    margin-right: 1rem;
+  }
+  &__title {
+    margin: 0.8rem 0;
+  }
+  &__logo, &__title {
+    user-select: none;
+  }
+}
+
+.options {
+  &-container {
+    border-bottom: var(--dark-border-line);
+  }
+  max-width: 1024px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) 200px;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas: 
+  'initdate colorselect button'
+  'finadate orderselect button';
+  padding: 1rem 4rem;
+  align-items: center;
+  row-gap: 0.5rem;
+  column-gap: 4rem;
+  &__date {
+    &--initial {
+      grid-area: initdate;
+    }
+    &--final {
+      grid-area: finadate;
+    }
+  }
+  &__color {
+    grid-area: colorselect;
+  }
+  &__order {
+    grid-area: orderselect;
+  }
+  &__button {
+    grid-area: button;
+  }
+  &__date, &__color, &__order {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+  } 
+  &__button {
+    padding: 1rem;
+    height: 0.8rem;
+    width: 6rem;
+    text-align: center;
+    margin: 0.2rem auto 0.2rem auto;
+    border-radius: 25px;
+    border: var(--dark-border-line);
+    user-select: none;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    &:hover {
+      color: var(--primary-bg-color);
+      background-color: var(--accent-color);
+    }
+    &--active {
+      color: var(--primary-bg-color);
+      background-color: var(--accent-color);
+    }
+    &--action {
+      height: 1rem;
+      margin: 0 1rem 0 1rem;
+    }
+  }
+}
+
+.records {
+  height: 520px;
+  overflow-y: scroll;
+  border-bottom: var(--dark-border-line);
+  padding: 0 2rem;
+  @media (min-width: 1360px) {
+    height: 500px;
+  }
+  @media (min-width: 1440px) {
+    height: 600px;
+  }
+  &::-webkit-scrollbar {
+    width: 1rem;
+    &-track {
+      background-color: var(--canvas-bg-color);
+    }
+    &-thumb {
+      background-color:var(--scroll-bg-color);
+      border-radius: 1rem;
+      &:hover {
+        background-color:var(--scroll-accent-color);
+      }
+    }
+  }
+}
+
+.card-container {
+  max-width: 1440px;
+  margin: 2rem auto;
+  border: var(--dark-border-line);
+  background-color: var(--report-bg-color);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 30px 1fr;
+  grid-template-areas: 
+  'tit tit'
+  'cardimg1 cardimg2';
+  .date {
+    grid-area: tit;
+    text-align: center;
+  }
+  .card:nth-child(2) {
+    grid-area: cardimg1;
+    border-right: var(--dark-border-line);
+    padding-right: 1.5rem;
+  }
+  .card:nth-child(3) {
+    grid-area: cardimg2;
+    border-left: var(--dark-border-line);
+    padding-left: 1.5rem;
+    order: 3;
+  }
+}
+
+.card {
+  height: 300px;
+  padding: 0.5rem;
+  padding-top: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 20px repeat(2, 1fr);
+  grid-template-areas: 
+  'tit tit'
+  'img img'
+  'con col';
+  gap: 0.5rem;
+  &__title {
+    grid-area: tit;
+    text-align: center;
+    font-size: 1rem;
+    margin: 0;
+  }
+  &__image-container {
+    grid-area: img;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  &__image {
+    max-width: 160px;
+    @media (min-width: 1360px) {
+      max-width: 180px;
+    }
+    @media (min-width: 1440px) {
+      max-width: 200px;
+    }
+  }
+  &__contour {
+    grid-area: con;
+  }
+  &__colour {
+    grid-area: col;
+  }
+  &__contour, &__colour {
+    border: var(--dark-border-line);
+    border-radius: 0.5rem;
+    padding: 0.4rem 1.5rem;
+    max-height: 150px;
+    display: flex;
+    flex-direction: column;
+  }
+  &__parameter {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.4rem;
+  }
+  &__subtitle {
+    margin: 0;
+    text-align: center;
+  }
+}

@@ -4,93 +4,185 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="assets/favicon.png"/>
     <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/normalize.css" />
-    <script
-      src="https://kit.fontawesome.com/ef38c41be6.js"
-      crossorigin="anonymous"
-    ></script>
-    <title>BANARVI</title>
+    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <script src="js/sweetAlert2.js"></script>
+    <title>BANARVI | Análisis</title>
   </head>
   <body class="theme">
     <header class="header">
-      <img src="assets/icon.svg" alt="logo" class="header__logo"/>
-      <h1 class="header__title">BANARVI</h1>
+      <div class="logo-container">
+        <img src="assets/icon.svg" alt="logo" class="header__logo" />
+        <h1 class="header__title">BANARVI</h1>
+      </div>
+      <nav class="main-nav" id="main-nav" aria-label="Main menu" data-menu="main-menu">
+        <ul class="main-nav__list" data-menu="main-menu">
+          <li class="main-nav__item" data-menu="main-menu">
+            <a href="#" class="main-nav__link main-nav__link--active" data-menu="main-menu">Análisis</a>
+          </li>
+          <li class="main-nav__item" data-menu="main-menu">
+            <a href="records.html" class="main-nav__link main-nav__link--inactive" data-menu="main-menu">Registros</a>
+          </li>
+        </ul>
+      </nav>
     </header>
     <main class="main">
+      <div class="image-select" id="image-options">
+        <div
+          id="option-captures"
+          class="image-select__option image-select__option--active"
+          data-type="captures"
+        >
+          Capturas
+        </div>
+        <div
+          id="option-processing"
+          class="image-select__option"
+          data-type="processing"
+        >
+          Procesamiento
+        </div>
+      </div>
       <section class="multimedia" id="multimedia">
         <div class="multimedia__image" data-image="image-1" id="div-image-1">
-          <canvas id="canvas-image-1" class="multimedia__canvas" data-image="image-1"></canvas>
+          <span class="multimedia__label">Captura 1</span>
+          <canvas
+            id="canvas-image-1"
+            class="multimedia__canvas"
+            data-image="image-1"
+          ></canvas>
         </div>
         <div class="multimedia__image" data-image="image-2" id="div-image-2">
-          <canvas id="canvas-image-2" data-image="image-2" class="multimedia__canvas"></canvas>
+          <span class="multimedia__label">Captura 2</span>
+          <canvas
+            id="canvas-image-2"
+            data-image="image-2"
+            class="multimedia__canvas"
+          ></canvas>
         </div>
       </section>
-      <section class="control">
+      <section class="control" id="control">
         <div class="control__device">
-          <label for="camera-device" class="control__label control__label--camera">Cámara</label>
+          <span
+            class="control__label control__label--camera">Cámara</span>
           <select
             name="camera-device"
             id="camera-device"
             class="control__select"
           ></select>
-          <div class="control__device-play" id="play-button"><i class="fas fa-play"></i></div>
-          <div class="control__device-refresh" id="refresh-button"><i class="fas fa-sync-alt"></i></div>
+          <div class="control__device-play" id="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+          <div class="control__device-refresh" id="refresh-button">
+            <i class="fas fa-sync-alt"></i>
+          </div>
         </div>
         <div class="control__panel">
           <div class="control__button" id="camera-button">
             <i class="fas fa-camera control__icon"></i>
-            <label for="camera-button" class="control__label control__label--button">Capturar</label>
+            <span
+              class="control__label control__label--button">Capturar</span>
           </div>
           <div class="control__button" id="delete-button">
             <i class="fas fa-trash-alt control__icon"></i>
-            <label for="delete-button" class="control__label control__label--button">Limpiar</label>
+            <span
+              class="control__label control__label--button">Limpiar</span>
           </div>
           <div class="control__button" id="analize-button">
             <i class="fas fa-file-signature control__icon"></i>
-            <label for="analize-button" class="control__label control__label--button">Analizar</label>
+            <span
+              class="control__label control__label--button">Analizar</span>
           </div>
         </div>
-        <video class="control__stream" id="stream"></video>
+        <video class="control__stream" id="stream" poster="assets/videoBanner.png"></video>
+        <div class="spinner-container" id="spinner">
+          <div class="spinner"></div>
+          <span class="spinner__text">Analizando</span>
+        </div>
       </section>
-      <section class="report">
+      <section id="control-processing" class="control-processing">
+        <article class="control-processing__images">       
+          <div id="original-img-btn" class="control-processing__button" data-action="original-image">Originales</div>
+          <div id="contour-img-btn" class="control-processing__button" data-action="contour-image">Contornos</div>
+          <div id="in-range-img-btn" class="control-processing__button" data-action="in-range-image">Colores</div>
+        </article>
+        <article class="control-processing__actions">
+          <div id="save-button" class="control-processing__button control-processing__button--action" data-action="save">
+            <i class="fas fa-save control-processing__icon"></i>
+            <span class="control-processing__label">Guardar</span>
+          </div>
+          <div id="cancel-button" class="control-processing__button control-processing__button--action" data-action="cancel">
+            <i class="fas fa-times-circle control-processing__icon" data-action="cancel"></i>
+            <span class="control-processing__label" data-action="cancel">Cancelar</span>
+          </div>
+        </article>
+      </section>
+      <from class="report">
         <h2 class="report__title">Resultado</h2>
-        <div class="report__image">
-          <h3 class="report__subtitle">Imagen 1</h3>
-          <div class="report__parameter">
-            <span class="report__label">Parámetro 1:</span>
-            <span class="report__value">Valor 1</span>
+        <div class="report__container report__container--image1">
+          <h3 class="report__title-image">Imagen 1</h3>
+          <div class="report__contour">
+            <h4 class="report__subtitle">Contorno</h4>
+            <div class="report__parameter">
+              <span class="report__label">Dimensión:</span>
+              <span class="report__value" id="dimension-value-img1">Valor 1</span>
+            </div>
+            <div class="report__parameter">
+              <span class="report__label">Área:</span>
+              <span class="report__value" id="area-value-img1">Valor 2</span>
+            </div>
+            <div class="report__parameter">
+              <span class="report__label">Perímetro:</span>
+              <span class="report__value" id="perimeter-value-img1">Valor 3</span>
+            </div>
           </div>
-          <div class="report__parameter">
-            <span class="report__label">Parámetro 2:</span>
-            <span class="report__value">Valor 2</span>
-          </div>
-          <div class="report__parameter">
-            <span class="report__label">Parámetro 3:</span>
-            <span class="report__value">Valor 3</span>
+          <div class="report__colour">
+            <h4 class="report__subtitle">Colores</h4>
+            <div class="report__parameter">
+              <span class="report__label">Amarillo:</span>
+              <span class="report__value" id="yellow-value-img1">Valor 1</span>
+            </div>
+            <div class="report__parameter">
+              <span class="report__label">Verde:</span>
+              <span class="report__value" id="green-value-img1">Valor 2</span>
+            </div>
           </div>
         </div>
-        <div class="report__image">
-          <h3 class="report__subtitle">Imagen 2</h3>
-          <div class="report__parameter">
-            <span class="report__label">Parámetro 1:</span>
-            <span class="report__value">Valor 1</span>
+        <div class="report__container report__container--image2">
+          <h3 class="report__title-image">Imagen 2</h3>
+          <div class="report__contour">
+            <h4 class="report__subtitle">Contorno</h4>
+            <div class="report__parameter">
+              <span class="report__label">Dimensión:</span>
+              <span class="report__value" id="dimension-value-img2">Valor 1</span>
+            </div>
+            <div class="report__parameter">
+              <span class="report__label">Área:</span>
+              <span class="report__value" id="area-value-img2">Valor 2</span>
+            </div>
+            <div class="report__parameter">
+              <span class="report__label">Perímetro:</span>
+              <span class="report__value" id="perimeter-value-img2">Valor 3</span>
+            </div>
           </div>
-          <div class="report__parameter">
-            <span class="report__label">Parámetro 2:</span>
-            <span class="report__value">Valor 2</span>
-          </div>
-          <div class="report__parameter">
-            <span class="report__label">Parámetro 3:</span>
-            <span class="report__value">Valor 3</span>
+          <div class="report__colour">
+            <h4 class="report__subtitle">Colores</h4>
+            <div class="report__parameter">
+              <span class="report__label">Amarillo:</span>
+              <span class="report__value" id="yellow-value-img2">Valor 1</span>
+            </div>
+            <div class="report__parameter">
+              <span class="report__label">Verde:</span>
+              <span class="report__value" id="green-value-img2">Valor 2</span>
+            </div>
           </div>
         </div>
-        <div class="report__category">
-          <h3 class="report__subtitle">Categoría</h3>
-        </div>
-      </section>
+      </from>
     </main>
     <script src="js/index.js"></script>
+    <script src="js/openCV.js"></script>
   </body>
 </html>

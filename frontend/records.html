@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/records.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <title>BANARVI | Registros</title>
+</head>
+<body class="theme">
+  <header class="header">
+      <div class="logo-container">
+        <img src="assets/icon.svg" alt="logo" class="header__logo" />
+        <h1 class="header__title">BANARVI</h1>
+      </div>
+      <nav class="main-nav" id="main-nav" aria-label="Main menu" data-menu="main-menu">
+        <ul class="main-nav__list" data-menu="main-menu">
+          <li class="main-nav__item" data-menu="main-menu">
+            <a href="index.html" class="main-nav__link main-nav__link--inactive" data-menu="main-menu">Análisis</a>
+          </li>
+          <li class="main-nav__item" data-menu="main-menu">
+            <a href="#" class="main-nav__link main-nav__link--active" data-menu="main-menu">Registros</a>
+          </li>
+        </ul>
+      </nav>
+  </header>
+  <main class="main">
+    <div class="options-container">
+      <div class="options">
+        <div class="options__date options__date--initial">
+          <span class="options__label">Fecha inicial</span>
+          <input type="date" class="options__input" id="initial-date">
+        </div>
+        <div class="options__date options__date--final">
+          <span class="options__label">Fecha final</span>
+          <input type="date" class="options__input" id="final-date">
+        </div>
+        <div class="options__color">
+          <span class="options__label">Color</span>
+          <select name="color" id="color-select" class="options__select">
+            <option value="green">Verde</option>
+            <option value="yellow">Amarillo</option>
+            <option value="all">Todos</option>
+          </select>
+        </div>
+        <div class="options__order">
+          <span class="options__label">Orden</span>
+          <select name="order" id="order-select" class="options__select">
+            <option value="upward">Ascendente</option>
+            <option value="downward">Descendente</option>
+          </select>
+        </div>
+        <div class="options__button" id="search-button">
+          <i class="fas fa-search options__icon"></i>
+          <span
+            class="options__label options__label--button">Buscar</span>
+        </div>
+      </div>
+    </div>
+    <div class="records" id="records">
+    </div> 
+  </main>
+  <script src="js/records.js"></script>
+</body>
+</html>
