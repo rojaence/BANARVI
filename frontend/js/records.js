@@ -2,16 +2,131 @@ const records = document.getElementById("records");
 const searchButton = document.getElementById("search-button");
 const initialDate = document.getElementById("initial-date");
 const finalDate = document.getElementById("final-date");
-const colorSelect = document.getElementById("color-select");
+const paramSelect = document.getElementById("param-order-select");
 const orderSelect = document.getElementById("order-select");
+const modalWindow = document.getElementById("modal-window");
+const modalCloseButton = document.getElementById("btn-close-modal");
+const imageModalWindow = document.getElementById("image-modal");
+const main = document.getElementById("main");
+const header = document.getElementById("header");
+const buttonTheme = document.getElementById("button-theme");
+const localStorage = window.localStorage;
+
+modalWindow.addEventListener("click", (e) => {
+  console.log(e.target.dataset.modal);
+  switch (e.target.dataset.modal) {
+    case "outside":
+      modalWindow.classList.add("modal-container--disabled");
+      main.classList.remove("element-hidden");
+      header.classList.remove("element-hidden");
+      break;
+  }
+});
+
+buttonTheme.addEventListener('click', () => {
+  buttonTheme.classList.contains("fa-moon")
+  ? setTheme("dark")
+  : setTheme("light");
+})
 
 window.addEventListener("load", () => {
   setInitialDate();
 });
 
+records.addEventListener("click", (e) => {
+  if (e.target.dataset.id) {
+    let cardContainer;
+    if (e.target.classList[0] == 'fas') {
+      cardContainer = e.target.parentNode.parentNode.parentNode;
+    }
+    else if (e.target.classList[0] == 'button') {
+      cardContainer = e.target.parentNode.parentNode
+    }
+    const url = "http://localhost/banarvi/backend/deleteData.php";
+    const formData = new FormData();
+    Swal.fire({
+      title: `¿Desea eliminar el registro ${e.target.dataset.id}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#237AA8',
+      cancelButtonColor: '#D17384',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      background: "#e6f0e65",
+      iconColor: '#D17384'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        formData.append('idProcessingResult', e.target.dataset.id);
+        fetch(url, { method: 'POST', body: formData})
+        .then(res => res.text())
+        .then(res => {
+          if (res == 'ok') {
+            Swal.fire({
+              title: "Registro eliminado",
+              confirmButtonColor: "#4fbc61",
+              icon: 'success',
+              iconColor: "#4fbc61",
+              background: "#e6f0e65",
+            });
+            records.removeChild(cardContainer);
+          } else {
+            console.log(res)
+            Swal.fire({
+              title: "No se ha logrado eliminar",
+              confirmButtonColor: '#D17384',
+              icon: 'error',
+              iconColor: '#D17384',
+              background: "#e6f0e65",
+            });
+          }
+        })
+      }
+    })
+  }
+});
+
 searchButton.addEventListener("click", () => {
-  clearRecords();
-  getProcessingData('All');
+  let initYear = parseInt(initialDate.value.substring(0, 4));
+  let initMonth = parseInt(initialDate.value.substring(5, 7));
+  let initDay = parseInt(initialDate.value.substring(8, 10));
+  let finaYear = parseInt(finalDate.value.substring(0, 4));
+  let finaMonth = parseInt(finalDate.value.substring(5, 7));
+  let finaDay = parseInt(finalDate.value.substring(8, 10));
+  if (initDay > finaDay) {
+    Swal.fire({
+      title: "La fecha inicial debe ser menor a la fecha final",
+      confirmButtonColor: "#4fbc61",
+      icon: "warning",
+      iconColor: "#4fbc61",
+      background: "#e6f0e65",
+    });
+  } else {
+    clearRecords();
+    getProcessingData();
+  }
+});
+
+const setTheme = (value) => {
+  switch (value) {
+    case "light":
+      buttonTheme.classList.add("fa-moon");
+      buttonTheme.classList.remove("fa-sun")
+      document.body.classList.remove("theme--dark");
+      localStorage.setItem("theme", "light");
+      break;
+    case "dark":
+      buttonTheme.classList.remove("fa-moon");
+      buttonTheme.classList.add("fa-sun")
+      document.body.classList.add("theme--dark");
+      localStorage.setItem("theme", "dark");
+      break;
+  }
+};
+
+window.addEventListener("load", () => {
+  localStorage.getItem("theme")
+  ? setTheme(localStorage.getItem("theme"))
+  : localStorage.setItem("theme", "light");
 });
 
 const createNewCard = (data) => {
@@ -56,7 +171,6 @@ const createNewCard = (data) => {
   cardParamPerim.className = "card__parameter";
   cardParamYellow.className = "card__parameter";
   cardParamGreen.className = "card__parameter";
-
   cardDimenLabel.className = "card__label";
   cardDimenValue.className = "card__value";
   cardAreaLabel.className = "card__label";
@@ -73,6 +187,29 @@ const createNewCard = (data) => {
   originImg.setAttribute("src", data.originImg);
   contourImg.setAttribute("src", data.contourImg);
   colourImg.setAttribute("src", data.colourImg);
+
+  originImg.addEventListener("dblclick", () => {
+    modalWindow.classList.remove("modal-container--disabled");
+    main.classList.add("element-hidden");
+    header.classList.add("element-hidden");
+    imageModalWindow.src = originImg.src;
+  });
+
+  contourImg.addEventListener("dblclick", () => {
+    console.log("Click");
+    modalWindow.classList.remove("modal-container--disabled");
+    main.classList.add("element-hidden");
+    header.classList.add("element-hidden");
+    imageModalWindow.src = contourImg.src;
+  });
+
+  colourImg.addEventListener("dblclick", () => {
+    modalWindow.classList.remove("modal-container--disabled");
+    main.classList.add("element-hidden");
+    header.classList.add("element-hidden");
+    imageModalWindow.src = colourImg.src;
+  });
+
   imageContainer.appendChild(originImg);
   imageContainer.appendChild(contourImg);
   imageContainer.appendChild(colourImg);
@@ -130,21 +267,30 @@ const setInitialDate = () => {
   finalDate.setAttribute("value", currentDate);
 };
 
-const getProcessingData = (type) => {
+const getProcessingData = () => {
   let data;
   const url = "http://localhost/banarvi/backend/getProcessingData.php";
-  switch (type) {
-    case "All":
-      const formData = new FormData();
-      formData.append("typeQuery", type);
-      fetch(url, { method: "POST", body: formData})
-        .then((res) => res.json())
-        .then(data => fillData(data))
-      break;
-  }
-  return data;
+  const formData = new FormData();
+  formData.append("initDate", initialDate.value);
+  formData.append("finDate", finalDate.value);
+  formData.append("orderBy", paramSelect.value);
+  formData.append("order", orderSelect.value);
+  fetch(url, { method: "POST", body: formData })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.length == 0) {
+        Swal.fire({
+          title: "No se encontraron registros",
+          confirmButtonColor: "#4fbc61",
+          icon: "warning",
+          iconColor: "#4fbc61",
+          background: "#e6f0e65",
+        });
+      } else {
+        fillData(data);
+    }
+  });
 };
-
 
 const fillData = (data) => {
   for (item of data) {
@@ -153,17 +299,42 @@ const fillData = (data) => {
     const date = document.createElement("DIV");
     const dateLabel = document.createElement("SPAN");
     const dateValue = document.createElement("SPAN");
+
+    const idCardContainer = document.createElement("DIV");
+    const idCardLabel = document.createElement("SPAN");
+    const idCardValue = document.createElement("SPAN");
+    const buttonDeleteCard = document.createElement("DIV");
+    const buttonCardIcon = document.createElement("I");
+
     cardContainer.className = "card-container";
     date.className = "date";
     dateLabel.className = "date__label";
     dateValue.className = "date__value";
     dateLabel.textContent = "Fecha: ";
     dateValue.textContent = item.dateData;
+
+    idCardContainer.className = "id-card";
+    idCardLabel.className = "id-card__label";
+    idCardValue.className = "id-card__value";
+    buttonDeleteCard.classList.add("button", "button-delete");
+    buttonCardIcon.classList.add("fas", "fa-trash-alt", "button__icon");
+
+    idCardLabel.textContent = "ID:";
+    idCardValue.textContent = item.idProcessingResult;
+
+    buttonDeleteCard.appendChild(buttonCardIcon);
+    buttonDeleteCard.setAttribute("data-id", item.idProcessingResult);
+    buttonCardIcon.setAttribute("data-id", item.idProcessingResult);
+    idCardContainer.appendChild(idCardLabel);
+    idCardContainer.appendChild(idCardValue);
+
     date.appendChild(dateLabel);
     date.appendChild(dateValue);
+    date.appendChild(idCardContainer);
+    date.appendChild(buttonDeleteCard);
     cardContainer.appendChild(date);
     const dataImage1 = {
-      dimension : `${item.widthRectImg1} × ${item.heightRectImg1}`,
+      dimension: `${item.widthRectImg1} × ${item.heightRectImg1}`,
       area: item.areaImg1,
       perimeter: item.perimeterImg1,
       yellow: item.yellowImg1,
@@ -171,10 +342,10 @@ const fillData = (data) => {
       originImg: `data:image/png;base64,${item.originImg1}`,
       contourImg: `data:image/png;base64,${item.contourImg1}`,
       colourImg: `data:image/png;base64,${item.colourImg1}`,
-      numberImg: 1
-    }
+      numberImg: 1,
+    };
     const dataImage2 = {
-      dimension : `${item.widthRectImg2} × ${item.heightRectImg2}`,
+      dimension: `${item.widthRectImg2} × ${item.heightRectImg2}`,
       area: item.areaImg2,
       perimeter: item.perimeterImg2,
       yellow: item.yellowImg2,
@@ -182,8 +353,8 @@ const fillData = (data) => {
       originImg: `data:image/png;base64,${item.originImg2}`,
       contourImg: `data:image/png;base64,${item.contourImg2}`,
       colourImg: `data:image/png;base64,${item.colourImg2}`,
-      numberImg: 2
-    }
+      numberImg: 2,
+    };
     const cardImage1 = createNewCard(dataImage1);
     const cardImage2 = createNewCard(dataImage2);
     cardContainer.appendChild(cardImage1);
@@ -191,10 +362,10 @@ const fillData = (data) => {
     fragment.appendChild(cardContainer);
     records.appendChild(fragment);
   }
-}
+};
 
 const clearRecords = () => {
-  while(records.firstChild) {
+  while (records.firstChild) {
     records.removeChild(records.firstChild);
   }
-} 
+};

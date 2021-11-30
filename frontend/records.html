@@ -4,15 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png"/>
     <link rel="stylesheet" href="css/records.css" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/fontawesome.min.css">
     <link rel="stylesheet" href="css/all.min.css">
+    <script src="js/sweetAlert2.js"></script>
     <title>BANARVI | Registros</title>
 </head>
 <body class="theme">
-  <header class="header">
+  <div class="modal-container modal-container--disabled" id="modal-window" data-modal="outside">
+    <img src="" alt="" class="modal-container__image" id="image-modal" data-modal="inside">
+    <i class="fas fa-times-circle modal-container__button" id="btn-close-modal" data-modal="outside"></i>
+  </div>
+  <header class="header" id="header">
       <div class="logo-container">
         <img src="assets/icon.svg" alt="logo" class="header__logo" />
         <h1 class="header__title">BANARVI</h1>
@@ -23,34 +28,40 @@
             <a href="index.html" class="main-nav__link main-nav__link--inactive" data-menu="main-menu">Análisis</a>
           </li>
           <li class="main-nav__item" data-menu="main-menu">
-            <a href="#" class="main-nav__link main-nav__link--active" data-menu="main-menu">Registros</a>
+            <a href="live.html" class="main-nav__link main-nav__link--inactive" data-menu="main-menu">En vivo</a>
           </li>
+          <!-- <li class="main-nav__item" data-menu="main-menu">
+            <a href="records.html" class="main-nav__link main-nav__link--active" data-menu="main-menu">Registros</a>
+          </li> -->
         </ul>
       </nav>
+      <i class="fas fa-moon button-theme" id="button-theme"></i>
   </header>
-  <main class="main">
+  <main class="main" id="main">
     <div class="options-container">
       <div class="options">
         <div class="options__date options__date--initial">
           <span class="options__label">Fecha inicial</span>
-          <input type="date" class="options__input" id="initial-date">
+          <input type="date" class="options__input" id="initial-date" min="2021-08-02">
         </div>
         <div class="options__date options__date--final">
           <span class="options__label">Fecha final</span>
-          <input type="date" class="options__input" id="final-date">
+          <input type="date" class="options__input" id="final-date" min="2021-08-02">
         </div>
         <div class="options__color">
-          <span class="options__label">Color</span>
-          <select name="color" id="color-select" class="options__select">
-            <option value="green">Verde</option>
-            <option value="yellow">Amarillo</option>
-            <option value="all">Todos</option>
+          <span class="options__label">Ordenar por</span>
+          <select name="color" id="param-order-select" class="options__select">
+            <option class="options__item" value="date" selected>Fecha</option>
+            <option class="options__item" value="area">Área</option>
+            <option class="options__item" value="perimeter">Perímetro</option>
+            <option class="options__item" value="green">Color Verde</option>
+            <option class="options__item" value="yellow">Color Amarillo</option>
           </select>
         </div>
         <div class="options__order">
           <span class="options__label">Orden</span>
           <select name="order" id="order-select" class="options__select">
-            <option value="upward">Ascendente</option>
+            <option value="upward" selected>Ascendente</option>
             <option value="downward">Descendente</option>
           </select>
         </div>

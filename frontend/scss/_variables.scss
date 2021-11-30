@@ -7,10 +7,29 @@ $border-color: #737373;
 $canvas-bg-color: #c5c5c5;
 $light-bg-color: #ddd;
 $report-bg-color: #e6f0e6;
+$text-color: #000;
+$text-color-header: #f2f2f2;
+$text-color-header-active: #0a3f5c;
+$accent-color-2: #0a3f5c; 
+$link-transparent: #73737369;
+$track-bg-color: #c5c5c598;
+$input-bg-color: #f2f2f2;
+
+// Dark 
+$secondary-bg-color-dark: #161722;
+$report-bg-color-dark: #25273C;
+$text-color-dark: #f2f2f2;
+$accent-color-2-dark: #88d295;
+$text-color-header-active-dark: #f2f2f2;
+$track-bg-color-dark: #7373733b;
+$input-bg-color-dark: #c5c5c5;
+
 .theme {
   --primary-bg-color: #{$primary-bg-color};
   --secondary-bg-color: #{$secondary-bg-color};
+  --text-color-header: #{$text-color-header};
   --accent-color: #{$accent-color};
+  --accent-color-2: #{$accent-color-2};
   --border-color: #{$border-color};
   --dark-border-line: 2px solid var(--border-color);
   --light-border-line: 1px solid var(--border-color);
@@ -19,4 +38,20 @@ $report-bg-color: #e6f0e6;
   --light-bg-color: #{$light-bg-color};
   --scroll-bg-color: #{$scroll-bg-color};
   --scroll-accent-color: #{$scroll-accent-color};
+  --text-color: #{$text-color};
+  --text-color-header: #{$text-color-header};
+  --text-color-header-active: #{$text-color-header-active};
+  --link-transparent: #{$link-transparent};
+  --track-bg-color: #{$track-bg-color}; 
+  --input-bg-color: #{$input-bg-color};
+  &--dark {
+    --secondary-bg-color: #{$secondary-bg-color-dark};
+    --report-bg-color: #{$report-bg-color-dark};
+    --text-color: #{$text-color-dark};
+    --accent-color-2: #{$accent-color-2-dark};
+    --text-color-header-active: #{$text-color-header-active-dark};
+    --link-transparent: #{$link-transparent};
+    --track-bg-color: #{$track-bg-color-dark}; 
+    --input-bg-color: #{$input-bg-color-dark};
+  }
 }

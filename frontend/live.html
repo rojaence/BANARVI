@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png"/>
+  <link rel="stylesheet" href="css/live.css" />
+  <link rel="stylesheet" href="css/normalize.css" />
+  <link rel="stylesheet" href="css/fontawesome.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <script src="js/sweetAlert2.js"></script>
+  <script async src="js/opencv.js"></script>
+  <script src="js/utils.js"></script>
+  <title>BANARVI | En vivo</title>
+</head>
+<body class="theme">
+  <div class="modal-container modal-container--disabled" id="modal-window" data-modal="outside">
+    <img src="" alt="" class="modal-container__image" id="image-modal" data-modal="inside">
+    <i class="fas fa-times-circle modal-container__button" id="btn-close-modal" data-modal="outside"></i>
+  </div>
+  <header class="header" id="header">
+    <div class="logo-container">
+      <img src="assets/icon.svg" alt="logo" class="header__logo" />
+      <h1 class="header__title">BANARVI</h1>
+    </div>
+    <nav class="main-nav" id="main-nav" aria-label="Main menu" data-menu="main-menu">
+      <ul class="main-nav__list" data-menu="main-menu">
+        <li class="main-nav__item" data-menu="main-menu">
+          <a href="index.html" class="main-nav__link main-nav__link--inactive" data-menu="main-menu">Análisis</a>
+        </li>
+        <li class="main-nav__item" data-menu="main-menu">
+          <a href="live.html" class="main-nav__link main-nav__link--active" data-menu="main-menu">En vivo</a>
+        </li>
+        <!-- <li class="main-nav__item" data-menu="main-menu">
+          <a href="records.html" class="main-nav__link main-nav__link--inactive" data-menu="main-menu">Registros</a>
+        </li> -->
+      </ul>
+    </nav>
+    <i class="fas fa-moon button-theme" id="button-theme"></i>
+  </header>
+
+  <main class="main">
+
+    <div class="display">
+      <canvas id="canvas" class="display__canvas"></canvas>
+    </div>
+
+    <div class="control">
+      <div class="control__actions">
+        <span class="control__label control__label--camera">Cámara</span>
+        <select
+          name="camera-device"
+          id="camera-device"
+          class="control__select"
+        ></select>
+        <div class="button" id="play-button">
+          <i class="fas fa-play button__icon"></i>
+        </div>
+        <div class="button" id="refresh-button">
+          <i class="fas fa-sync-alt button__icon"></i>
+        </div>
+      </div>
+      <video height="480" width="640" class="control__stream" id="stream" poster="assets/videoBanner.png"></video>
+    </div>
+
+    <div class="data" id="data">
+      <div class="data__container">
+        <p class="data__title">Contorno</p>
+        <div class="data__field">
+          <span class="data__label">Dimensión:</span>
+          <span class="data__value" id="data-dimension"></span>
+        </div>
+        <div class="data__field">
+          <span class="data__label">Área:</span>
+          <span class="data__value" id="data-area"></span>
+        </div>
+        <div class="data__field">
+          <span class="data__label">Perímetro:</span>
+          <span class="data__value" id="data-perimeter"></span>
+        </div>
+      </div>
+      <div class="data__container">
+        <p class="data__title data__title--colours">Colores</p>
+        <div class="data__field">
+          <span class="data__label">Verde:</span>
+          <span class="data__value" id="data-green"></span>
+        </div>
+        <div class="data__field">
+          <span class="data__label">Amarillo:</span>
+          <span class="data__value" id="data-yellow"></span>
+        </div>
+        <div class="data__field">
+          <span class="data__label">Dominante:</span>
+          <div class="data__color" id="data-colour"></div>
+        </div>
+      </div>
+    </div>
+    <canvas id="canvas-aux" width="960" height="720" style="display: none"></canvas>
+  </main>
+  <script src="js/live.js"></script>
+</body>
+</html>

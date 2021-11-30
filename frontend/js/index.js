@@ -29,6 +29,17 @@ const areaValueImg2 = document.getElementById("area-value-img2");
 const perimeterValueImg2 = document.getElementById("perimeter-value-img2");
 const greenValueImg2 = document.getElementById("green-value-img2");
 const yellowValueImg2 = document.getElementById("yellow-value-img2");
+const modalWindow = document.getElementById("modal-window");
+const modalCloseButton = document.getElementById("btn-close-modal");
+const imageModalWindow = document.getElementById("image-modal");
+const main = document.getElementById("main");
+const header = document.getElementById("header");
+const buttonTheme = document.getElementById("button-theme");
+const localStorage = window.localStorage;
+const gaugeValue = document.getElementById("gauge-value");
+const colorVeredict = document.getElementById("color-veredict");
+const gauge = document.getElementById("gauge");
+
 let dataContourImg1;
 let dataContourImg2;
 let dataColourImg1;
@@ -44,6 +55,9 @@ let contourImage2 = new Image();
 let inRangeImage1 = new Image();
 let inRangeImage2 = new Image();
 let flagButtonCamera = false;
+
+// Variables para determinar el veredicto de madiración
+let percentYellow, percentGreen;
 
 multimediaContainer.addEventListener("click", (e) => {
   if (
@@ -75,9 +89,56 @@ listCamDevice.addEventListener("change", () => {
 });
 
 saveButton.addEventListener("click", () => {
-  console.log('clic en save button')
-  saveProcessingData();
+  Swal.fire({
+    title: "¿Desea guardar este análisis?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#237AA8",
+    cancelButtonColor: "#D17384",
+    confirmButtonText: "Sí, Guardar",
+    cancelButtonText: "Cancelar",
+    background: "#e6f0e65",
+    iconColor: "#D17384",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      saveProcessingData();
+    }
+  });
+});
+
+modalWindow.addEventListener("click", (e) => {
+  switch (e.target.dataset.modal) {
+    case "outside":
+      modalWindow.classList.add("modal-container--disabled");
+      main.classList.remove("element-hidden");
+      header.classList.remove("element-hidden");
+      break;
+  }
+});
+
+modalCloseButton.addEventListener("click", () => {
+  modalWindow.classList.add("modal-container--disabled");
+});
+
+buttonTheme.addEventListener('click', () => {
+  buttonTheme.classList.contains("fa-moon")
+  ? setTheme("dark")
+  : setTheme("light");
 })
+
+canvasImage1.addEventListener("dblclick", () => {
+  modalWindow.classList.remove("modal-container--disabled");
+  main.classList.add("element-hidden");
+  header.classList.add("element-hidden");
+  imageModalWindow.src = canvasImage1.toDataURL("image/png");
+});
+
+canvasImage2.addEventListener("dblclick", () => {
+  modalWindow.classList.remove("modal-container--disabled");
+  main.classList.add("element-hidden");
+  header.classList.add("element-hidden");
+  imageModalWindow.src = canvasImage2.toDataURL("image/png");
+});
 
 controlProcessing.addEventListener("click", (e) => {
   switch (e.target.dataset.action) {
@@ -103,6 +164,23 @@ controlProcessing.addEventListener("click", (e) => {
       break;
   }
 });
+
+const setTheme = (value) => {
+  switch (value) {
+    case "light":
+      buttonTheme.classList.add("fa-moon");
+      buttonTheme.classList.remove("fa-sun")
+      document.body.classList.remove("theme--dark");
+      localStorage.setItem("theme", "light");
+      break;
+    case "dark":
+      buttonTheme.classList.remove("fa-moon");
+      buttonTheme.classList.add("fa-sun")
+      document.body.classList.add("theme--dark");
+      localStorage.setItem("theme", "dark");
+      break;
+  }
+};
 
 const changeControlButtonsStyle = (type) => {
   switch (type) {
@@ -184,11 +262,13 @@ analizeButton.addEventListener("click", () => {
   controlContainer.classList.add("control--processing");
   image1.src = canvasImage1.toDataURL("image/png");
   image2.src = canvasImage2.toDataURL("image/png");
+  spinner.classList.remove("spinner--hidden");
   imageProcessing();
   changeCanvasImage("original");
   changeImageProcess("processing");
   fillData();
   controlContainer.classList.remove("control--processing");
+  spinner.classList.add("spinner--hidden");
 });
 
 const imageProcessing = () => {
@@ -200,6 +280,29 @@ const imageProcessing = () => {
   contourImage2.src = dataContourImg2.image;
   inRangeImage1.src = dataColourImg1.image;
   inRangeImage2.src = dataColourImg2.image;
+  calculatePercentColor();
+};
+
+const calculatePercentColor = () => {
+  percentYellow = dataColourImg1.yellowArea + dataColourImg2.yellowArea;
+  percentGreen = dataColourImg1.greenArea + dataColourImg2.greenArea;
+  let totalColorArea = percentYellow + percentGreen;
+  // Porcentaje de color amarillo 
+  percentYellow = (percentYellow * 100) / totalColorArea;
+  // Porcentaje de color verde
+  percentGreen = (percentGreen * 100) / totalColorArea;
+  gaugeValue.textContent = `${percentYellow.toFixed(2)}%`;
+  gauge.classList.remove("gauge--undefined");
+  if (percentGreen < percentYellow) {
+    colorVeredict.textContent = "Maduro";
+    gauge.classList.add("gauge--ripe");
+  } else if (percentGreen > percentYellow) {
+    colorVeredict.textContent = "Verde";
+    gauge.classList.add("gauge--optimum");
+  }  else if (percentGreen == 0 && percentYellow == 0) {
+    colorVeredict.textContent = "Indefinido";
+    gauge.classList.add("gauge--undefined");
+  }
 };
 
 const contoursProcessing = (canvas) => {
@@ -215,7 +318,7 @@ const contoursProcessing = (canvas) => {
     src,
     contours,
     hierarchy,
-    cv.RETR_EXTERNAL,
+    cv.RETR_CCOMP,
     cv.CHAIN_APPROX_SIMPLE
   );
   cv.drawContours(dst, contours, -1, contoursColor, 1, 8, hierarchy, 100);
@@ -283,16 +386,38 @@ const inRangeProcessing = (canvas) => {
   cv.cvtColor(src, src, cv.COLOR_BGR2HSV, 0);
 
   // Valores mínimo y máximo ara detectar color amarillo
-  let lowGreen = new cv.Mat(src.rows, src.cols, src.type(), [35, 50, 50, 25]);
-  let highGreen = new cv.Mat(src.rows, src.cols, src.type(), [70, 255, 255, 255]);
+  let lowGreen = new cv.Mat(src.rows, src.cols, src.type(), [35, 50, 50, 255]);
+  let highGreen = new cv.Mat(
+    src.rows,
+    src.cols,
+    src.type(),
+    [70, 255, 255, 255]
+  );
   // Valores mínimo y máximo para detectar color verde
   let lowYellow = new cv.Mat(src.rows, src.cols, src.type(), [20, 50, 50, 255]);
-  let highYellow = new cv.Mat(src.rows, src.cols, src.type(), [30, 255, 255, 255]);
+  let highYellow = new cv.Mat(
+    src.rows,
+    src.cols,
+    src.type(),
+    [30, 255, 255, 255]
+  );
 
   cv.inRange(src, lowYellow, highYellow, dstYellow);
   cv.inRange(src, lowGreen, highGreen, dstGreen);
-  cv.findContours(dstYellow,contoursYellow,hierarchyYellow,cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
-  cv.findContours(dstGreen,contoursGreen,hierarchyGreen,cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
+  cv.findContours(
+    dstYellow,
+    contoursYellow,
+    hierarchyYellow,
+    cv.RETR_CCOMP,
+    cv.CHAIN_APPROX_SIMPLE
+  );
+  cv.findContours(
+    dstGreen,
+    contoursGreen,
+    hierarchyGreen,
+    cv.RETR_CCOMP,
+    cv.CHAIN_APPROX_SIMPLE
+  );
   // Suma del total de área para color amarillo
   let lenContours = contoursYellow.size();
   let totalYellowArea = 0;
@@ -363,6 +488,11 @@ const clearData = () => {
   perimeterValueImg2.textContent = "";
   greenValueImg2.textContent = "";
   yellowValueImg2.textContent = "";
+  gaugeValue.textContent = "";
+  colorVeredict.textContent = "";
+  gauge.classList.remove("gauge--undefined");
+  gauge.classList.remove("gauge--ripe");
+  gauge.classList.remove("gauge--optimum");
 };
 
 const getSupportUserMedia = () => {
@@ -432,6 +562,9 @@ const adjustApectSize = () => {
 };
 
 window.addEventListener("load", () => {
+  localStorage.getItem("theme")
+  ? setTheme(localStorage.getItem("theme"))
+  : localStorage.setItem("theme", "light");
   if (getSupportUserMedia()) {
     fillDeviceList();
   }
@@ -458,83 +591,73 @@ let MediaStreamHelper = {
   },
 };
 
-const consult = () => {
-  console.log("a");
-  try {
-    fetch("http://localhost/banarvi/backend/showData.php")
-    .then((res) => (res.ok ? Promise.resolve(res) : Promise.reject(res)))
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-  } catch (error) {
-    console.log(error)
-  }
-};
-
 const saveProcessingData = () => {
   const date = getDate();
   const url = "http://localhost/banarvi/backend/registerData.php";
   const formData = new FormData();
-  formData.append('date', date);
-  formData.append('widthRectImg1', dataContourImg1.dimension[0]);
-  formData.append('heightRectImg1', dataContourImg1.dimension[1]);
-  formData.append('areaImg1', dataContourImg1.area);
-  formData.append('perimeterImg1', dataContourImg1.perimeter);
-  formData.append('yellowImg1', dataColourImg1.yellowArea);
-  formData.append('greenImg1', dataColourImg1.greenArea);
-  formData.append('widthRectImg2', dataContourImg2.dimension[0]);
-  formData.append('heightRectImg2', dataContourImg2.dimension[1]);
-  formData.append('areaImg2', dataContourImg2.area);
-  formData.append('perimeterImg2', dataContourImg2.perimeter);
-  formData.append('yellowImg2', dataColourImg2.yellowArea);
-  formData.append('greenImg2', dataColourImg2.greenArea);
-  fetch(url, {method: 'POST', body: formData})
-  .then(res => res.text())
-  .then(res => {
-    if (!isNaN(res)) {
-      saveProcessingImage(parseInt(res));
-    }
-    else {
-      console.log('No se recibió un número');
-      console.log(res)
-    }
-  })
-}
+  formData.append("date", date);
+  formData.append("widthRectImg1", dataContourImg1.dimension[0]);
+  formData.append("heightRectImg1", dataContourImg1.dimension[1]);
+  formData.append("areaImg1", dataContourImg1.area);
+  formData.append("perimeterImg1", dataContourImg1.perimeter);
+  formData.append("yellowImg1", dataColourImg1.yellowArea);
+  formData.append("greenImg1", dataColourImg1.greenArea);
+  formData.append("widthRectImg2", dataContourImg2.dimension[0]);
+  formData.append("heightRectImg2", dataContourImg2.dimension[1]);
+  formData.append("areaImg2", dataContourImg2.area);
+  formData.append("perimeterImg2", dataContourImg2.perimeter);
+  formData.append("yellowImg2", dataColourImg2.yellowArea);
+  formData.append("greenImg2", dataColourImg2.greenArea);
+  fetch(url, { method: "POST", body: formData })
+    .then((res) => res.text())
+    .then((res) => {
+      if (!isNaN(res)) {
+        saveProcessingImage(parseInt(res));
+      } else {
+        console.log("No se recibió un número");
+        console.log(res);
+      }
+    });
+};
 
 const saveProcessingImage = (idProcessing) => {
   const url = "http://localhost/banarvi/backend/registerImageCollection.php";
   const formData = new FormData();
-  formData.append('idProcessingResult', idProcessing);
-  formData.append('originImg1', image1.src.split(",")[1]);
-  formData.append('contourImg1', contourImage1.src.split(",")[1]);
-  formData.append('colourImg1', inRangeImage1.src.split(",")[1]);
-  formData.append('originImg2', image2.src.split(",")[1]);
-  formData.append('contourImg2', contourImage2.src.split(",")[1]);
-  formData.append('colourImg2', inRangeImage2.src.split(",")[1]);
-  fetch(url, {method: 'POST', body: formData})
-  .then(res => res.text())
-  .then(res => {
-    if(res == "ok") {
-      Swal.fire({
-        icon: 'success',
-        title: 'Registrado',
-        showConfirmButton: true
-      }).then(
-        changeControlButtonsStyle("cancel"),
-        clearData(),
-        changeCanvasImage("original"),
-        changeImageProcess("captures")
-      )
-    }
-    else {
-      console.log(res)
-      Swal.fire({
-        icon: 'error',
-        title: 'Error...',
-        text: 'No se realizó el registro',
-      })
-    }
-  })
-}
+  formData.append("idProcessingResult", idProcessing);
+  formData.append("originImg1", image1.src.split(",")[1]);
+  formData.append("contourImg1", contourImage1.src.split(",")[1]);
+  formData.append("colourImg1", inRangeImage1.src.split(",")[1]);
+  formData.append("originImg2", image2.src.split(",")[1]);
+  formData.append("contourImg2", contourImage2.src.split(",")[1]);
+  formData.append("colourImg2", inRangeImage2.src.split(",")[1]);
+  fetch(url, { method: "POST", body: formData })
+    .then((res) => res.text())
+    .then((res) => {
+      if (res == "ok") {
+        Swal.fire({
+          icon: "success",
+          title: "Registrado",
+          iconColor: "#4fbc61",
+          showConfirmButton: true,
+          confirmButtonColor: "#4fbc61",
+        }).then(
+          changeControlButtonsStyle("cancel"),
+          clearData(),
+          changeCanvasImage("original"),
+          changeImageProcess("captures")
+        );
+      } else {
+        console.log(res);
+        Swal.fire({
+          icon: "error",
+          title: "Error...",
+          text: "No se realizó el registro",
+          iconColor: "#D17384",
+          confirmButtonColor: "#D17384",
+        });
+      }
+    });
+};
 
 const getDate = () => {
   const date = new Date();
@@ -548,5 +671,5 @@ const getDate = () => {
     day = `0${day}`;
   }
   const currentDate = `${year}-${month}-${day}`;
-  return currentDate
+  return currentDate;
 };

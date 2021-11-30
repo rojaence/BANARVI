@@ -7,20 +7,37 @@ html {
 
 body {
   background-color: var(--secondary-bg-color);
+  color: var(--text-color);
   min-height: 100vh;
+  &::-webkit-scrollbar {
+    width: 8px;
+    &-track {
+      background-color: var(--track-bg-color);
+    }
+    &-thumb {
+      background-color:var(--scroll-bg-color);
+      border-radius: 1rem;
+      &:hover {
+        background-color:var(--scroll-accent-color);
+      }
+    }
+  }
 }
 
 .header {
+  position: sticky;
+  top: 0;
   background-color: var(--primary-bg-color);
-  color: var(--secondary-bg-color);
+  color: var(--text-color-header);
   padding: 0 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: auto 1fr 80px;
   .logo-container {
     display: flex;
   }
   .main-nav {
+    justify-self: right;
+    align-self: end;
     &__list {
       display: flex;
       padding-left: 0;
@@ -30,20 +47,23 @@ body {
       align-self: flex-start;
     }
     &__link {
+      user-select: none;
       text-decoration: none;
-      color: var(--secondary-bg-color);
+      color: var(--text-color-header);
       padding: 1rem 4rem;
+      font-weight: 700;
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
       transition: background-color 0.2s, color 0.2s;
       &--inactive {
         &:hover {
+          background-color: var(--link-transparent);
           color: var(--accent-color);
         }
       }
       &--active {
         background-color: var(--secondary-bg-color);
-        color: var(--primary-bg-color);
+        color: var(--text-color-header-active);
       }
     }
   }
@@ -60,6 +80,17 @@ body {
   &__title {
     user-select: none;
   }
+  .button-theme {
+    cursor: pointer;
+    font-size: 2rem;
+    transition: transform 0.2s, color 0.2s;
+    align-self: center;
+    justify-self: center;
+    &:hover {
+      transform: scale(1.1);
+      color: var(--accent-color);
+    }
+  }
 }
 
 .main {
@@ -69,11 +100,46 @@ body {
     "multimedia control"
     "report report";
   grid-template-columns: 800px auto;
-  grid-template-rows: 40px 310px auto;
+  grid-template-rows: 40px 310px 310px;
   gap: 1rem;
   padding: 1rem 1rem 0;
   max-width: 1440px;
   margin: 0 auto;
+  @media (min-width: 100px) and (max-width: 1260px) {
+    max-width: 800px;
+    padding-bottom: 1rem;
+    grid-template-columns: 800px;
+    grid-template-rows: 40px 310px 310px auto;
+    grid-template-areas:
+      "imgsel imgsel"
+      "multimedia multimedia"
+      "control control"
+      "report report";
+    column-gap: 0;
+    .control {
+      width: 550px;
+      margin: 0 auto;
+      &__button {
+        flex-direction: row;
+        width: 75%;
+        border-radius: 3rem;
+        justify-content: space-around;
+      }
+      &__label--button {
+        display: block;
+      }
+    }
+    .report {
+      grid-template-columns: 1fr;
+      grid-template-rows: 20px auto auto;
+      &__title {
+        grid-column: 1 / 1;
+      }
+      &__container {
+        margin: 0.2rem;
+      }
+    }
+  }
   @media (min-width: 1360px) {
     padding-top: 2rem 2rem 0;
   }
@@ -110,6 +176,7 @@ body {
   place-items: left;
   &__image {
     border: var(--dark-border-line);
+    background-color: var(--report-bg-color);
     padding: 0.2rem;
     display: grid;
     max-width: 380px;
@@ -125,6 +192,7 @@ body {
   }
   &__label {
     justify-self: center;
+    user-select: none;
   }
   &__canvas {
     background-color: var(--canvas-bg-color);
@@ -151,6 +219,14 @@ body {
     grid-area: device;
     display: flex;
     justify-content: space-around;
+  }
+  &__select {
+    border-radius: 1rem;
+    background-color: var(--text-color-header);
+    outline: none;
+  }
+  &__label {
+    user-select: none;
   }
   &__label--camera {
     text-align: center;
@@ -212,7 +288,7 @@ body {
     color: var(--border-color);
     transition: color 0.1s, transform 0.2s;
     &:hover {
-      color: var(--primary-bg-color);
+      color: var(--accent-color-2);
       transform: scale(1.1);
     }
   }
@@ -364,6 +440,9 @@ body {
       padding: 1rem;
     }
   }
+  &__label, &__title-image, &__subtitle, &__title, &__value {
+    user-select: none;
+  }
   &__title-image {
     grid-area: titl;
     margin: 0;
@@ -390,7 +469,7 @@ body {
   &__parameter {
     display: flex;
     flex-direction: row;
-    margin: 0.5rem 0;
+    margin: 15px 0;
   }
   &__label {
     margin-right: 2rem;
@@ -404,6 +483,7 @@ body {
   &__title {
     grid-column: 1 / span 3;
     justify-self: left;
+    margin-top: 0.5rem 0;
   }
   &__value {
     margin-left: auto;
@@ -413,6 +493,96 @@ body {
 .multimedia__image,
 .report,
 .report__container,
-.control {
+.control, .color-result {
   border-radius: 1rem;
+}
+
+.report, .control {
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: #616161b9;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 80% 20%;
+  place-items: center;
+  transition: background-color 0.2s;
+  &__image {
+    width: 75vh;
+    align-self: end;
+    user-select: none;
+    @media (min-width: 1367px) {
+      width: 90vh;
+    }
+  }
+  &__button {
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 2.5rem;
+    color: var(--primary-bg-color);
+    transition: transform 0.2s, color 0.2s;
+    &:hover {
+      transform: scale(1.1);
+      color: var(--accent-color);
+    }
+  }
+  &--disabled {
+    display: none;
+  }
+}
+
+.element-hidden {
+  position: static;
+  overflow: hidden;
+}
+
+.color-result {
+  border: var(--dark-border-line);
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 200px;
+  height: 185px;
+  user-select: none; 
+  margin-left: 1rem;
+  &__label {
+    text-align: center;
+    font-weight: 700;
+    margin: 0;
+    &--title {
+      margin-bottom: 0.5rem;
+    }
+  }
+  &__veredict {
+    text-align: center;
+    font-weight: 700;
+  }
+  .gauge {
+    width: 120px;
+    height: 120px;
+    margin: 5px auto;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    color: $accent-color-2;
+    transition: background-color 0.2s, color 0.2s;
+    &__value {
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    &--optimum {
+      background-color: rgb(80, 255, 95);
+    }
+    &--ripe {
+      background-color: rgb(255, 255, 108);
+    }
+    &--undefined {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
 }
