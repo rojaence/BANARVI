@@ -23,10 +23,9 @@ También están programadas algunas funciones para almacenar registros en
 una base SQL aunque están deshabilitadas por lo que sólo está habilitado  
 el frontend para realizar análisis.  
 
-Aclaro que este proyecto lo he realizado como una práctica mientras cursaba  
-un semestre en la universidad con motivos de aprendizaje de tecnologías tanto  
-web como visión por computadora, por lo que asumo que se pueden mejorar  
-muchos aspectos.
+⚠️ Aclaro que este proyecto lo he realizado con motivos de aprendizaje de  
+tecnologías tanto web como visión por computadora, por lo que asumo que  
+se pueden mejorar muchos aspectos.  
 
 ## Características
 
@@ -52,13 +51,19 @@ muchos aspectos.
 
 ## Probar la aplicación
 
-⚠️ Es necesario utilizar un servidor local como XAMPP o liveServer en VSCode 
+Puede ejecutarse de dos formas:
+
+👉 Mediante un servidor local como XAMPP o liveServer en VSCode 
 para permitir el acceso a los dispositivos de cámara desde el navegador.
+ 
+👉 A través de github Pages: [Click aquí](https://rojaence.github.io/BANARVI/frontend)
+
 
 ⚠️ Es importante que al realizar pruebas el entorno tenga:
 
 - Buena iluminación  
-- Fondo de color blanco  
+- Fondo de color blanco
+
 
 ## Test realizado con un cubo de Rubik  
 
