@@ -294,7 +294,7 @@ const calculatePercentColor = () => {
   gaugeValue.textContent = `${percentYellow.toFixed(2)}%`;
   gauge.classList.remove("gauge--undefined");
   if (percentGreen < percentYellow) {
-    colorVeredict.textContent = "Maduro";
+    colorVeredict.textContent = "Amarillo";
     gauge.classList.add("gauge--ripe");
   } else if (percentGreen > percentYellow) {
     colorVeredict.textContent = "Verde";
