@@ -34,7 +34,7 @@ se pueden mejorar muchos aspectos.
 - Representación de imágenes mediante canvas  
 - Detección de contorno, área y perímetro  
 - Dibujado de contorno  
-- Detección de colores (verde y amnarillo)  
+- Detección de colores (verde y amarillo)  
 
 ## Tecnologías utilizadas
 
